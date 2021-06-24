@@ -8,10 +8,11 @@ import { useAuth } from '../hooks/userAuth'
 import { FormEvent, useState } from 'react'
 import { database } from '../services/firebase'
 
+
 export function Home(){
     const history = useHistory();
     const { signInWithGoogle, user } = useAuth()
-    const { roomCode, setRoomCode } = useState('')
+    const { roomCode, setRoomCode } = useState()
     
     async function handleCreateRoom(){  
         if(!user){
@@ -28,8 +29,14 @@ export function Home(){
             return;
         }
 
-        const roomRef = await database
+        const roomRef = await database.ref(`rooms/${roomCode}`).get();
 
+        if(!roomRef.exists()){
+            alert("Room does not exists")
+            return
+        }
+
+        history.push(`/rooms/${roomCode}`)
     }
 
     return(
