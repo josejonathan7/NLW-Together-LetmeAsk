@@ -12,7 +12,7 @@ import { database } from '../services/firebase'
 export function Home(){
     const history = useHistory();
     const { signInWithGoogle, user } = useAuth()
-    const { roomCode, setRoomCode } = useState()
+    const [ roomCode, setRoomCode ] = useState('')
     
     async function handleCreateRoom(){  
         if(!user){
@@ -34,6 +34,11 @@ export function Home(){
         if(!roomRef.exists()){
             alert("Room does not exists")
             return
+        }
+
+        if(roomRef.val().endedAt){
+            alert('Room does not exists!');
+            return;
         }
 
         history.push(`/rooms/${roomCode}`)
